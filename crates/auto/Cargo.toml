@@ -1,0 +1,31 @@
+[package]
+name = "partage-wifi-auto"
+description = "Partage automatique : corrige le relais du point d'accès mobile natif de Windows, sans interface"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+# Le binaire embarque un manifeste `requireAdministrator` : son harnais de test ne pourrait pas
+# s'exécuter sans élévation. La logique et ses tests vivent dans la bibliothèque.
+[lib]
+name = "pw_auto"
+path = "src/lib.rs"
+
+[[bin]]
+name = "partage-wifi-auto"
+path = "src/main.rs"
+test = false
+
+[build-dependencies]
+embed-resource = "3.0.12"
+
+[dependencies]
+log = "0.4"
+pw-engine = { path = "../engine" }
+pw-support = { path = "../support" }
+pw-winsys = { path = "../winsys" }
+thiserror = "2"
+
+[dependencies.windows]
+version = "0.62"
+features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging"]

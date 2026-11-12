@@ -1,0 +1,28 @@
+#pragma code_page(65001)
+#include <winver.h>
+
+1 24 "auto.exe.manifest"
+1 ICON "icon.ico"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     0,1,0,0
+PRODUCTVERSION  0,1,0,0
+FILEOS          VOS_NT_WINDOWS32
+FILETYPE        VFT_APP
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040C04B0"
+    BEGIN
+      VALUE "FileDescription",  "Partage Wi-Fi Auto"
+      VALUE "ProductName",      "Partage Wi-Fi"
+      VALUE "FileVersion",      "0.1.0"
+      VALUE "ProductVersion",   "0.1.0"
+      VALUE "OriginalFilename", "partage-wifi-auto.exe"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x040C, 0x04B0
+  END
+END

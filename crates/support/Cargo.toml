@@ -1,0 +1,10 @@
+[package]
+name = "pw-support"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+description = "Briques communes aux exécutables de Partage Wi-Fi : emplacements, journal, pilote WinDivert embarqué"
+
+[dependencies]
+log = { version = "0.4", features = ["std"] }
+pw-engine = { path = "../engine" }

@@ -1,0 +1,13 @@
+# Compilation Rust (dont les dossiers cibles dédiés : target-axios, target-engine…)
+/target
+/target-*/
+
+# Interface
+node_modules
+/app/dist
+
+# Fichiers générés par Tauri
+/app/src-tauri/gen/
+
+# Divers
+*.log

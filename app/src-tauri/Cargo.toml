@@ -1,0 +1,31 @@
+[package]
+name = "partage-wifi"
+description = "Partage de connexion Wi-Fi pour Windows 11"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+# Le binaire embarque un manifeste `requireAdministrator` : son harnais de test ne peut pas
+# s'exécuter sans élévation. Les tests vivent dans la bibliothèque (lib.rs et modules).
+[[bin]]
+name = "partage-wifi"
+path = "src/main.rs"
+test = false
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+pw-engine = { path = "../../crates/engine" }
+pw-winsys = { path = "../../crates/winsys" }
+pw-support = { path = "../../crates/support" }
+tauri = { version = "2", features = ["tray-icon", "image-png"] }
+tauri-plugin-single-instance = "2"
+serde = { version = "1", features = ["derive"] }
+log = { version = "0.4", features = ["std"] }
+thiserror = "2"
+tokio = { version = "1", features = ["sync", "time"] }
+tauri-plugin-notification = "2"
+serde_json = "1"
+windows = { version = "0.62", features = ["Foundation", "Web_Http", "Win32_System_Time"] }
+windows-future = "0.3"
