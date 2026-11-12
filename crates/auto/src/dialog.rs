@@ -6,7 +6,7 @@ use windows::Win32::UI::WindowsAndMessaging::{
     MB_YESNO, MESSAGEBOX_RESULT, MESSAGEBOX_STYLE,
 };
 
-const TITLE: &str = "Partage Wi-Fi";
+const TITLE: &str = "axios";
 
 fn show(text: &str, style: MESSAGEBOX_STYLE) -> MESSAGEBOX_RESULT {
     // SAFETY: chaînes valides pendant l'appel, aucune fenêtre parente.

@@ -43,7 +43,7 @@ pub struct Monitor<H: Host> {
     if_index: Option<u32>,
     /// Dernière erreur consignée : une erreur qui se répète n'est écrite qu'une fois.
     last_error: Option<String>,
-    /// Le moteur est tenu par l'application Partage Wi-Fi (déjà consigné).
+    /// Le moteur est tenu par l'application axios (déjà consigné).
     busy: bool,
 }
 
@@ -89,7 +89,7 @@ impl<H: Host> Monitor<H> {
                 }
                 Ok(None) => {
                     if !self.busy {
-                        log::info!("moteur utilisé par l'application Partage Wi-Fi : en attente");
+                        log::info!("moteur utilisé par l'application axios : en attente");
                         self.busy = true;
                     }
                     return;

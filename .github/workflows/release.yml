@@ -1,0 +1,61 @@
+# Publie une version : compile sur Windows et attache les exécutables à la release GitHub.
+# Déclenchement : pousser une étiquette `vX.Y.Z` (ex. `git tag v0.1.0 && git push origin v0.1.0`).
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Dépendances de l'interface
+        working-directory: app
+        run: npm ci
+
+      - name: Application et installeur
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: app
+          tagName: ${{ github.ref_name }}
+          releaseName: axios ${{ github.ref_name }}
+          releaseBody: |
+            Téléchargez **`axios_*_x64-setup.exe`**, lancez-le, puis ouvrez axios depuis le menu Démarrer.
+
+            - `axios_*_x64-setup.exe` : installeur (recommandé).
+            - `axios_*_x64_portable.exe` : même application, sans installation.
+            - `axios-auto_*_x64.exe` : version sans interface, qui corrige le point d'accès natif de Windows.
+
+            Windows 10/11 64 bits, droits administrateur requis. Voir le README pour l'avertissement SmartScreen.
+          releaseDraft: false
+          prerelease: false
+
+      - name: Version portable et version sans interface
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cargo build --release -p partage-wifi-auto
+          $v = "${{ github.ref_name }}".TrimStart("v")
+          Copy-Item target/release/partage-wifi.exe "axios_${v}_x64_portable.exe"
+          Copy-Item target/release/partage-wifi-auto.exe "axios-auto_${v}_x64.exe"
+          gh release upload "${{ github.ref_name }}" "axios_${v}_x64_portable.exe" "axios-auto_${v}_x64.exe" --clobber

@@ -1,4 +1,4 @@
-//! Partage automatique : version sans interface de Partage Wi-Fi.
+//! Partage automatique : version sans interface d'axios.
 //!
 //! L'utilisateur allume le point d'accès mobile depuis Windows ; cet exécutable, lancé à
 //! l'ouverture de session, fait tourner le moteur tant que le point d'accès est allumé.
@@ -30,7 +30,7 @@ pub const STOP_SIGNAL: &str = r"Global\PartageWiFi.Auto.Arret";
 const LOG_FILE: &str = "partage-wifi-auto.log";
 
 pub fn main() -> ExitCode {
-    logging::init(LOG_FILE, "Partage Wi-Fi Auto");
+    logging::init(LOG_FILE, "axios auto");
     if std::env::args().skip(1).any(|a| a == BACKGROUND_ARG) {
         run_background()
     } else {

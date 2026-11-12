@@ -14,8 +14,8 @@ BEGIN
   BEGIN
     BLOCK "040C04B0"
     BEGIN
-      VALUE "FileDescription",  "Partage Wi-Fi Auto"
-      VALUE "ProductName",      "Partage Wi-Fi"
+      VALUE "FileDescription",  "axios auto"
+      VALUE "ProductName",      "axios"
       VALUE "FileVersion",      "0.1.0"
       VALUE "ProductVersion",   "0.1.0"
       VALUE "OriginalFilename", "partage-wifi-auto.exe"
