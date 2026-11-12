@@ -53,6 +53,23 @@ de Windows.
 - **Confort** : thème clair ou sombre (ou celui de Windows), taille de l'interface réglable, démarrage
   avec Windows, notification à la connexion d'un appareil.
 
+## Captures
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/pages/appareils.png" alt="Appareils connectés" width="200"><br><sub>Appareils</sub></td>
+    <td align="center"><img src="docs/pages/activite.png" alt="Activité sur 24 heures" width="200"><br><sub>Activité</sub></td>
+    <td align="center"><img src="docs/pages/reglages.png" alt="Accueil des réglages" width="200"><br><sub>Réglages</sub></td>
+    <td align="center"><img src="docs/pages/reseau.png" alt="Réglages réseau" width="200"><br><sub>Réseau</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/pages/protection.png" alt="Réglages de protection" width="200"><br><sub>Protection</sub></td>
+    <td align="center"><img src="docs/pages/avance.png" alt="Réglages avancés" width="200"><br><sub>Avancé</sub></td>
+    <td align="center"><img src="docs/pages/affichage.png" alt="Réglages d'affichage" width="200"><br><sub>Affichage</sub></td>
+    <td align="center"><img src="docs/pages/application.png" alt="Réglages de l'application" width="200"><br><sub>Application</sub></td>
+  </tr>
+</table>
+
 ## Pourquoi le partage de Windows ne suffit pas
 
 Certains routeurs (des MikroTik, par exemple) envoient tous leurs paquets avec une durée de vie
