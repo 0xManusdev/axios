@@ -81,13 +81,13 @@ async function boot(): Promise<void> {
   const count = h("span", { class: "tab-count mono" });
   const gear = h("button", { class: "icon-btn work-gear", type: "button", "aria-label": "Réglages", title: "Réglages" }, icon("settings", 16));
   gear.addEventListener("click", () => ctx.go("settings"));
-  const tabBar = h("nav", { class: "work-tabs", "aria-label": "Sections" }, ...TABS.map((t) => {
+  const tabBar = h("nav", { class: "work-tabs", "aria-label": "Sections" }, h("div", { class: "work-seg" }, ...TABS.map((t) => {
     const b = h("button", { class: "work-tab", type: "button" }, t.label);
     if (t.view === "devices") b.append(count);
     b.addEventListener("click", () => ctx.go(t.view));
     tabs.set(t.view, b);
     return b;
-  }), h("span", { class: "grow" }), gear);
+  })), h("span", { class: "grow" }), gear);
 
   // En réglages : un titre et un retour à la place des onglets.
   const back = h("button", { class: "icon-btn", type: "button", "aria-label": "Retour", title: "Retour" }, icon("arrowLeft", 16));

@@ -162,7 +162,7 @@ export function createSettings(ctx: Ctx, header: SettingsHeader): ViewHandle {
       const summary = h("span", { class: "nav-sum" });
       summaries.set(p.id, summary);
       const row = h("button", { class: "nav-row", type: "button" },
-        h("span", { class: "nav-icon" }, icon(p.icon, 16)),
+        h("span", { class: "nav-icon", "data-tone": p.id }, icon(p.icon, 16)),
         h("span", { class: "nav-text" }, h("span", { class: "nav-title" }, p.title), summary),
         h("span", { class: "nav-chevron" }, icon("chevron", 16)));
       row.addEventListener("click", () => open(p.id, true));

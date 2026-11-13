@@ -153,6 +153,7 @@ export function createHotspot(ctx: Ctx): HTMLElement {
     power.set(on || status === "starting");
     power.disable(busy);
     powerLabel.textContent = SIGNAL_LABEL[status];
+    powerLabel.dataset.status = status;
   });
 
   return h("section", { class: "hotspot", "aria-label": "Point d'accès" },

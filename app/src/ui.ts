@@ -214,8 +214,8 @@ export function select<T extends string>(
 
 // ---------- Étiquette ----------
 
-export const tag = (text: string, kind: "plain" | "off" = "plain"): HTMLElement =>
-  h("span", { class: `tag${kind === "off" ? " is-off" : ""}` }, text);
+export const tag = (text: string, kind: "plain" | "off" | "limit" = "plain"): HTMLElement =>
+  h("span", { class: `tag${kind === "plain" ? "" : ` is-${kind}`}` }, text);
 
 // ---------- Bouton icône ----------
 

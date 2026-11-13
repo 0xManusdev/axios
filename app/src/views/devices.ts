@@ -124,11 +124,12 @@ export function createDevices(ctx: Ctx): ViewHandle {
   function paint(row: Row): void {
     const d = row.device;
     row.el.classList.toggle("is-muted", d.blocked);
+    row.kind.dataset.kind = d.kind;
     row.kind.replaceChildren(icon(KIND_ICON[d.kind], 16));
     if (!row.editing) row.name.textContent = deviceName(d);
     row.tags.replaceChildren(
       ...(d.blocked ? [tag("coupé", "off")] : []),
-      ...(d.limit !== null ? [tag(`≤ ${limitLabel(d.limit)}`)] : []),
+      ...(d.limit !== null ? [tag(`≤ ${limitLabel(d.limit)}`, "limit")] : []),
     );
     row.sub.textContent = [d.alias ? d.hostname || d.vendor : d.vendor, since(d.connectedAt)].filter(Boolean).join(" · ");
     row.ip.textContent = d.ip ?? "—";

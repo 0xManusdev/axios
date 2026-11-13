@@ -1,4 +1,4 @@
-/* axios — sobre, quasi monochrome, esprit outil. Conçu d'abord pour la petite fenêtre (400 × 720). */
+/* axios — esprit Apple : listes groupées, matières, un bleu système. Conçu d'abord pour la petite fenêtre (400 × 720). */
 :root {
   --bg: #f3f3f3;
   --surface: #ffffff;
@@ -549,3 +549,218 @@ svg { display: block; flex: none; }
 .btn-block { width: 100%; height: 38px; justify-content: center; }
 .btn-danger { background: var(--danger); border-color: var(--danger); color: #ffffff; }
 .btn-danger:hover { background: var(--danger-hover); border-color: var(--danger-hover); }
+
+
+
+/* ================= Direction : esprit Apple =================
+   Fond groupé gris, contenus en listes blanches arrondies, séparateurs en retrait.
+   Couleurs système : bleu pour l'action, vert pour « allumé », rouge pour couper.
+   Contrôles natifs : segmenté à curseur blanc, interrupteur en pilule, champs remplis de gris. */
+:root {
+  --bg: #f2f2f7;
+  --surface: #ffffff;
+  --ink: #000000;
+  --ink-2: rgba(60, 60, 67, 0.62);
+  --ink-3: rgba(60, 60, 67, 0.34);
+  --sep: rgba(60, 60, 67, 0.16);
+  --line: var(--sep);
+  --line-strong: rgba(60, 60, 67, 0.22);
+  --fill: rgba(118, 118, 128, 0.12);
+  --fill-2: rgba(118, 118, 128, 0.2);
+  --hover: rgba(118, 118, 128, 0.1);
+  --row-hover: rgba(118, 118, 128, 0.06);
+  --active: rgba(118, 118, 128, 0.16);
+  --blue: #007aff;
+  --blue-hover: #0068d9;
+  --green: #34c759;
+  --red: #ff3b30;
+  --orange: #ff9500;
+  --indigo: #5856d6;
+  --gray: #8e8e93;
+  --teal: #5ac8fa;
+  --select: var(--blue);
+  --select-soft: rgba(0, 122, 255, 0.2);
+  --ok: #248a3d;
+  --danger: var(--red);
+  --danger-hover: #e0352b;
+  --danger-bg: rgba(255, 59, 48, 0.12);
+  --material: rgba(250, 250, 252, 0.78);
+  --thumb: #ffffff;
+  --r-group: 12px;
+  --r-ctl: 8px;
+}
+:root[data-theme="dark"] {
+  --bg: #000000;
+  --surface: #1c1c1e;
+  --ink: #ffffff;
+  --ink-2: rgba(235, 235, 245, 0.62);
+  --ink-3: rgba(235, 235, 245, 0.32);
+  --sep: rgba(84, 84, 88, 0.62);
+  --line-strong: rgba(84, 84, 88, 0.8);
+  --fill: rgba(118, 118, 128, 0.24);
+  --fill-2: rgba(118, 118, 128, 0.34);
+  --hover: rgba(118, 118, 128, 0.2);
+  --row-hover: rgba(118, 118, 128, 0.12);
+  --active: rgba(118, 118, 128, 0.28);
+  --blue: #0a84ff;
+  --blue-hover: #3a9bff;
+  --green: #30d158;
+  --red: #ff453a;
+  --orange: #ff9f0a;
+  --indigo: #5e5ce6;
+  --gray: #8e8e93;
+  --teal: #64d2ff;
+  --ok: #30d158;
+  --danger-bg: rgba(255, 69, 58, 0.18);
+  --material: rgba(44, 44, 46, 0.78);
+  --thumb: #636366;
+}
+
+/* Typographie : titres resserrés. */
+.hs-name { font-size: 22px; font-weight: 700; letter-spacing: -0.022em; }
+.work-title, .app-name { letter-spacing: -0.01em; }
+
+/* ---------- Fenêtre et cartes ---------- */
+.split { gap: 14px; padding: 0 12px 12px; }
+.app-mark { border-radius: 6px; background: linear-gradient(180deg, #2b95ff, #0066e0); color: #fff; box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.15); }
+.hotspot { border: 0; border-radius: 14px; box-shadow: none; }
+.hs-qr { border: 0; border-radius: 10px; box-shadow: 0 0 0 0.5px var(--line-strong); }
+.hs-signal[data-status="on"] { color: var(--blue); }
+
+/* L'espace de travail n'est plus une carte : il porte des listes groupées. */
+.work { background: transparent; border: 0; border-radius: 0; box-shadow: none; overflow: visible; }
+.work-tabs { height: auto; padding: 0 0 10px; border: 0; gap: 8px; align-items: center; }
+.work-head { padding: 0 0 10px; }
+.work-body { overflow: visible; }
+
+/* Segmenté : piste grise, curseur blanc en relief. */
+.work-seg, .seg { display: inline-flex; gap: 0; padding: 2px; border: 0; border-radius: 9px; background: var(--fill); }
+.work-tab { height: 28px; padding: 0 14px; border-radius: 7px; color: var(--ink); font-weight: 500; font-size: 13px; }
+.work-tab[aria-current="page"]::after { display: none; }
+.work-tab[aria-current="page"], .seg-btn[aria-checked="true"] {
+  background: var(--thumb); box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12), 0 3px 1px rgba(0, 0, 0, 0.04), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+}
+.seg-btn { height: 26px; padding: 0 11px; border-radius: 7px; color: var(--ink); }
+.work-gear { margin-right: 0; width: 32px; height: 32px; border-radius: 50%; background: var(--fill); color: var(--ink); }
+.work-gear:hover { background: var(--fill-2); }
+
+/* ---------- Listes groupées ---------- */
+.tbl-body, .set-rows, .act-chart, .act-shares { background: var(--surface); border: 0; border-radius: var(--r-group); overflow: hidden; }
+/* Séparateur en retrait, tracé en haut de chaque ligne sauf la première. */
+.tbl-row, .row, .nav-row, .share { border: 0; }
+.tbl-row + .tbl-row, .nav-row + .nav-row, .share + .share {
+  background-image: linear-gradient(var(--sep), var(--sep));
+  background-repeat: no-repeat; background-size: calc(100% - var(--inset, 16px)) 0.5px; background-position: right top;
+}
+.set-rows > .row + .row { box-shadow: inset 0 0.5px 0 var(--sep); }
+.tbl-row:hover, .nav-row:hover { background-color: var(--row-hover); }
+.tbl-row { --inset: 58px; min-height: 54px; }
+
+/* Appareils : glyphe gris sur pastille remplie. */
+.dv-kind[data-kind] { width: 30px; height: 30px; border-radius: 7px; background: var(--fill); color: var(--ink-2); }
+.tbl-row.is-muted .dv-kind[data-kind] { color: var(--ink-3); }
+
+/* Étiquettes : capsules. */
+.tag { height: 18px; padding: 0 7px; border: 0; border-radius: 999px; font-weight: 500; background: var(--fill); color: var(--ink-2); }
+.tag.is-off { color: var(--red); background: var(--danger-bg); }
+
+/* Réglages : pastilles pleines aux couleurs système, glyphe blanc. */
+.settings { padding: 0 0 4px; }
+.nav-row { --inset: 57px; min-height: 50px; padding: 8px 14px; gap: 14px; }
+.nav-icon { width: 29px; height: 29px; border-radius: 7px; color: #fff; background: var(--gray); }
+.nav-icon[data-tone="network"] { background: var(--blue); }
+.nav-icon[data-tone="protection"] { background: var(--green); }
+.nav-icon[data-tone="advanced"] { background: var(--orange); }
+.nav-icon[data-tone="display"] { background: var(--indigo); }
+.nav-icon[data-tone="app"] { background: var(--gray); }
+.nav-title { font-weight: 400; }
+.nav-chevron { color: var(--ink-3); }
+.set-rows { padding: 0 14px; }
+.set-rows:has(> .nav-row) { padding: 0; }
+.row { min-height: 48px; }
+
+/* Activité : graphique et répartition dans leurs propres groupes. */
+.toolbar { padding: 0 2px 10px; }
+.act-sum { font-size: 12.5px; }
+.act-chart { padding: 26px 14px 12px; }
+.act .section-title { padding: 14px 16px 6px; font-size: 12px; font-weight: 400; color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.02em; }
+.share { --inset: 52px; height: 38px; padding: 0 14px; }
+.act-shares { padding-bottom: 0; }
+.share .dv-kind[data-kind] { width: 24px; height: 24px; border-radius: 6px; }
+.share { grid-template-columns: 24px minmax(0, 1fr) 84px 64px; }
+@media (min-width: 760px) {
+  .share { grid-template-columns: 24px minmax(140px, 260px) 1fr 80px; }
+}
+.share-track { height: 6px; border-radius: 999px; background: var(--fill); }
+.share-fill { background: var(--blue); border-radius: 999px; }
+
+/* Graphiques : barres bleues arrondies, envoi en bleu clair. */
+.bars { gap: 3px; }
+.bar > span:last-child { border-radius: 3px 3px 0 0; }
+.bar-down { background: var(--blue); }
+.bar-up { background: var(--teal); }
+.chart-down { stroke: var(--blue); stroke-width: 2; }
+.chart-up { stroke: var(--teal); }
+
+/* Débits : neutres. */
+.rate svg, .rate.is-up svg { color: var(--ink-3); }
+
+/* ---------- Contrôles ---------- */
+/* Interrupteur : pilule verte, curseur rond. */
+.switch, .hs-power .switch { width: 38px; height: 23px; border: 0; border-radius: 999px; background: var(--fill-2); }
+.switch-knob, .hs-power .switch-knob {
+  top: 2px; left: 2px; width: 19px; height: 19px; border-radius: 50%; background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+}
+.switch[aria-checked="true"], .hs-power .switch[aria-checked="true"] { background: var(--green); border-color: transparent; }
+.switch[aria-checked="true"] .switch-knob, .hs-power .switch[aria-checked="true"] .switch-knob,
+:root[data-theme="dark"] .switch[aria-checked="true"] .switch-knob { transform: translateX(15px); background: #fff; }
+.hs-power { gap: 10px; color: var(--ink-2); }
+.hs-power-label[data-status="on"] { color: var(--ink); }
+
+/* Champs remplis, sans bordure. */
+.input { height: 34px; border: 0; border-radius: var(--r-ctl); background: var(--fill); }
+.input:focus { background: var(--surface); box-shadow: 0 0 0 3px var(--select-soft), 0 0 0 1px var(--blue); }
+
+/* Boutons : gris rempli à texte bleu ; principal bleu plein. */
+.btn { height: 32px; border: 0; border-radius: var(--r-ctl); background: var(--fill); color: var(--blue); }
+.btn:hover { background: var(--fill-2); }
+.btn-dark { background: var(--blue); color: #fff; }
+.btn-dark:hover { background: var(--blue-hover); }
+.btn-danger { background: var(--red); color: #fff; }
+.btn-danger:hover { background: var(--danger-hover); }
+.btn-block { height: 44px; border-radius: var(--r-group); font-size: 14px; }
+.set-quit { padding-top: 14px; }
+
+/* Menus déroulants : valeur en gris. Sous le QR code : capsule remplie. */
+.select.is-box { border: 0; background: transparent; color: var(--ink-2); padding: 0 4px 0 10px; min-width: 0; }
+.select.is-box:hover { background: var(--hover); }
+.hs-band .select { height: 28px; border: 0; border-radius: var(--r-ctl); background: var(--fill); color: var(--ink); }
+.hs-band .select:hover, .hs-band .select[aria-expanded="true"] { background: var(--fill-2); }
+
+/* Matières : menus et notifications translucides, flous. */
+.menu {
+  padding: 5px; border: 0; border-radius: 10px; background: var(--material);
+  backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%);
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.12), 0 10px 30px -6px rgba(0, 0, 0, 0.22);
+}
+.menu-item { height: 28px; border-radius: 5px; }
+.menu-item:hover:not(:disabled), .menu-item:focus-visible { background: var(--blue); color: #fff; }
+.menu-item:hover:not(:disabled) .menu-icon, .menu-item:focus-visible .menu-icon { color: #fff; }
+.toast {
+  border-radius: 999px; background: rgba(28, 28, 30, 0.82); color: #fff;
+  backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+.qr-panel { border: 0; border-radius: 16px; }
+.icon-btn { border-radius: var(--r-ctl); }
+
+@media (prefers-reduced-transparency: reduce) {
+  .menu, .toast { backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .menu { background: var(--surface); }
+  .toast { background: #1c1c1e; }
+}
+
+/* Séparateurs : plus de bordure pleine entre les lignes de répartition. */
+.share + .share { border-top: 0; }
+/* Textes secondaires : gris système, lisibles. */
+.dv-sub, .nav-sum, .row-desc, .act-sum { color: var(--ink-2); }

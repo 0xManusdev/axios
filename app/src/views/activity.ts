@@ -77,8 +77,8 @@ export function createActivity(ctx: Ctx): ViewHandle {
     }
     const max = Math.max(1, ...items.map((i) => i.total));
     shares.body.replaceChildren(...(items.length ? items.map((i) =>
-      h("div", { class: "share" },
-        h("span", { class: "dv-kind" }, icon(KIND_ICON[i.kind], 16)),
+      h("div", { class: "share", "data-kind": i.kind },
+        h("span", { class: "dv-kind", "data-kind": i.kind }, icon(KIND_ICON[i.kind], 14)),
         h("span", { class: "share-name" }, i.name),
         h("span", { class: "share-track" }, h("span", { class: "share-fill", style: `transform:scaleX(${i.total / max})` })),
         h("span", { class: "share-value" }, bytesText(i.total)),

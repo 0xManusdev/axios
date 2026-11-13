@@ -47,8 +47,8 @@ export function liveChart(): LiveChart {
   const defs = svg("defs");
   const grad = svg("linearGradient", { id: `fill-${Math.random().toString(36).slice(2)}`, x1: 0, y1: 0, x2: 0, y2: 1 });
   grad.append(
-    svg("stop", { offset: "0%", "stop-color": "var(--ink)", "stop-opacity": 0.07 }),
-    svg("stop", { offset: "100%", "stop-color": "var(--ink)", "stop-opacity": 0 }),
+    svg("stop", { offset: "0%", style: "stop-color: var(--blue); stop-opacity: 0.18" }),
+    svg("stop", { offset: "100%", style: "stop-color: var(--blue); stop-opacity: 0" }),
   );
   defs.append(grad);
   const grid = svg("g", { class: "chart-grid" });
