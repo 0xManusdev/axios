@@ -2461,7 +2461,7 @@ dependencies = [
 
 [[package]]
 name = "partage-wifi"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "log",
  "pw-engine",
@@ -2481,7 +2481,7 @@ dependencies = [
 
 [[package]]
 name = "partage-wifi-auto"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "embed-resource",
  "log",
@@ -2714,7 +2714,7 @@ dependencies = [
 
 [[package]]
 name = "pw-engine"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "dashmap",
  "libloading 0.9.0",
@@ -2725,7 +2725,7 @@ dependencies = [
 
 [[package]]
 name = "pw-support"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "log",
  "pw-engine",
@@ -2733,7 +2733,7 @@ dependencies = [
 
 [[package]]
 name = "pw-winsys"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "log",
  "serde",
