@@ -144,7 +144,7 @@ export function createSettings(ctx: Ctx, header: SettingsHeader): ViewHandle {
       settingRow("Serveur DNS", "Pour les appareils connectés", dns.el),
       customRow,
       settingRow("Toujours allumé", "Même sans appareil connecté", setting("keepAlive", "Toujours allumé")),
-      settingRow("Relance automatique", "Après une coupure du Wi-Fi", setting("autoRestart", "Relance automatique"))),
+      settingRow("Relance automatique", "Si le partage s’arrête sans vous", setting("autoRestart", "Relance automatique"))),
     app: h("div", { class: "set-rows" },
       settingRow("Démarrer avec Windows", null, setting("autostart", "Démarrer avec Windows")),
       settingRow("Partager au lancement", null, setting("shareOnLaunch", "Partager au lancement")),

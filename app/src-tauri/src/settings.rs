@@ -42,7 +42,7 @@ pub struct Settings {
     pub custom_dns: String,
     #[serde(deserialize_with = "lenient_true")]
     pub keep_alive: bool,
-    #[serde(deserialize_with = "lenient")]
+    #[serde(deserialize_with = "lenient_true")]
     pub auto_restart: bool,
 }
 
@@ -58,7 +58,7 @@ impl Default for Settings {
             dns: Dns::Auto,
             custom_dns: String::new(),
             keep_alive: true,
-            auto_restart: false,
+            auto_restart: true,
         }
     }
 }
@@ -186,8 +186,8 @@ mod tests {
     #[test]
     fn valeurs_par_defaut() {
         let s = Settings::default();
-        assert!(s.keep_alive);
-        assert!(!s.autostart && !s.share_on_launch && !s.ad_block && !s.auto_restart);
+        assert!(s.keep_alive && s.auto_restart);
+        assert!(!s.autostart && !s.share_on_launch && !s.ad_block);
         assert_eq!(s.dns, Dns::Auto);
         assert_eq!(s.default_limit, None);
     }

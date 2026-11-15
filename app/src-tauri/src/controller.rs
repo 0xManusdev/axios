@@ -11,7 +11,7 @@ use std::{
     net::Ipv4Addr,
     path::PathBuf,
     sync::{Arc, Mutex, OnceLock},
-    time::Duration,
+    time::{Duration, Instant},
 };
 
 use pw_engine::{Engine, EngineConfig, EngineStats};
@@ -21,7 +21,6 @@ use pw_winsys::{
     hotspot::{self, Band, HotspotInfo, Source},
     net,
     sync::NamedLock,
-    WinsysError,
 };
 use serde::Serialize;
 use tauri::{AppHandle, Emitter};
@@ -48,6 +47,9 @@ const IFACE_RETRY_DELAY: Duration = Duration::from_millis(500);
 const IFACE_ATTEMPTS_START: u32 = 20; // ~10 s
 const IFACE_ATTEMPTS_ADOPT: u32 = 6; // ~3 s
 const SHUTDOWN_STEP_TIMEOUT: Duration = Duration::from_secs(10);
+/// Relance automatique : délai après un premier échec, doublé à chaque échec suivant.
+const RETRY_MIN: Duration = Duration::from_secs(3);
+const RETRY_MAX: Duration = Duration::from_secs(60);
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "lowercase")]
@@ -84,9 +86,21 @@ struct State {
     op_error: Option<String>,
     /// Erreur de chargement du moteur.
     engine_error: Option<String>,
-    /// Le point d'accès s'est éteint faute de connexion alors que le partage était actif :
-    /// à rallumer au retour de la connexion (réglage `autoRestart`).
-    restart_pending: bool,
+    /// Le partage est voulu : allumé depuis l'application, au lancement ou depuis Windows, et
+    /// pas arrêté depuis l'application. S'il s'éteint (coupure de la connexion, veille, Wi-Fi
+    /// coupé, Windows), il est rallumé dès que possible (réglage `autoRestart`).
+    want_on: bool,
+    /// Prochaine tentative de relance après un échec (`None` : dès que possible).
+    retry_at: Option<Instant>,
+    /// Délai appliqué après le prochain échec.
+    retry_delay: Duration,
+}
+
+impl State {
+    fn reset_retry(&mut self) {
+        self.retry_at = None;
+        self.retry_delay = RETRY_MIN;
+    }
 }
 
 pub struct Controller {
@@ -139,7 +153,9 @@ impl Controller {
                 if_index: None,
                 op_error: None,
                 engine_error: None,
-                restart_pending: false,
+                want_on: false,
+                retry_at: None,
+                retry_delay: RETRY_MIN,
             }),
             engine: Mutex::new(None),
             engine_lock: Mutex::new(None),
@@ -494,7 +510,8 @@ impl Controller {
                         self.attach(idx);
                         self.update(|st| {
                             st.op_error = None;
-                            st.restart_pending = false;
+                            st.want_on = true;
+                            st.reset_retry();
                             st.snapshot.status = Status::On;
                         });
                     }
@@ -506,33 +523,44 @@ impl Controller {
                 self.detach();
                 self.set_status(Status::Off);
             }
-            (true, Status::On) => self.update(|st| st.restart_pending = false),
             _ => {}
         }
     }
 
-    /// Relance automatique : la connexion est revenue (le point d'accès répond) après une
-    /// coupure qui l'avait éteint (verrou `op` tenu par l'appelant).
-    async fn auto_restart(&self) {
-        let pending = {
+    /// Maintien du partage : s'il est voulu mais éteint, on le rallume ; après un échec, la
+    /// tentative suivante est espacée (3 s, 6 s… jusqu'à 1 min). Verrou `op` tenu par l'appelant.
+    async fn keep_sharing(&self) {
+        let due = {
             let st = lock(&self.state);
-            st.restart_pending && matches!(st.snapshot.status, Status::Off | Status::Error)
+            st.want_on
+                && matches!(st.snapshot.status, Status::Off | Status::Error)
+                && st.retry_at.is_none_or(|at| Instant::now() >= at)
         };
-        if !pending {
+        if !due || !self.settings().auto_restart {
             return;
         }
-        self.update(|st| st.restart_pending = false);
-        if self.settings().auto_restart {
-            log::info!("connexion revenue : relance du point d'accès");
-            self.start_sharing().await;
-        }
+        log::info!("partage éteint sans demande : relance du point d'accès");
+        self.start_sharing().await;
+        let ok = self.snapshot().status == Status::On;
+        self.update(|st| {
+            if ok {
+                st.reset_retry();
+            } else {
+                log::info!("nouvelle tentative dans {} s", st.retry_delay.as_secs());
+                st.retry_at = Some(Instant::now() + st.retry_delay);
+                st.retry_delay = (st.retry_delay * 2).min(RETRY_MAX);
+            }
+        });
     }
 
     /// Active ou désactive le partage. Un échec est consigné dans l'instantané
     /// (`status = error`) plutôt que renvoyé comme erreur de commande.
     pub async fn set_sharing(&self, on: bool) -> Snapshot {
         let _op = self.op.lock().await;
-        self.update(|st| st.restart_pending = false);
+        self.update(|st| {
+            st.want_on = on;
+            st.reset_retry();
+        });
         if on {
             self.start_sharing().await;
         } else {
@@ -661,9 +689,6 @@ impl Controller {
         if new.keep_alive != old.keep_alive {
             self.apply_keep_alive(new.keep_alive).await;
         }
-        if !new.auto_restart {
-            self.update(|st| st.restart_pending = false);
-        }
 
         self.settings.modify(|f| f.settings = new.clone());
         self.settings.save().await;
@@ -788,17 +813,10 @@ impl Controller {
                 match blocking_try(hotspot::info).await {
                     Ok(info) => {
                         this.sync_with(info, IFACE_ATTEMPTS_ADOPT).await;
-                        this.auto_restart().await;
+                        this.keep_sharing().await;
                     }
-                    Err(AppError::Winsys(WinsysError::NoInternet)) => {
-                        // Windows éteint le point d'accès quand la connexion disparaît.
-                        this.update(|st| {
-                            if st.snapshot.status == Status::On && !st.restart_pending {
-                                log::info!("connexion internet perdue pendant le partage");
-                                st.restart_pending = true;
-                            }
-                        });
-                    }
+                    // Sans connexion, Windows éteint le point d'accès et on ne peut pas le
+                    // rallumer : `keep_sharing` s'en charge au retour de la connexion.
                     Err(e) => log::debug!("sondage du point d'accès : {e}"),
                 }
                 this.refresh_source().await;
